@@ -15,7 +15,7 @@ class ProblemSpecification(State):
         sucessors = []
         mapa = self.createArea()
         for t in mapa[self.cid_atual]:
-            sucessors.append(ProblemSpecification(self.cid_fim, t[1], self.custo+t[0], f'Da cidade {self.cid_atual} para {t[1]}, custo atual {self.custo+t[0]}'))
+            sucessors.append(ProblemSpecification(self.cid_fim, t[1], t[0], f'Da cidade {self.cid_atual} para {t[1]}, custo atual {self.custo+t[0]}'))
 
         return sucessors
     
@@ -28,7 +28,7 @@ class ProblemSpecification(State):
         return "Describe the problem"
     
     def cost(self):
-        return 1
+        return self.custo
 
     def print(self):
         #
@@ -51,7 +51,7 @@ class ProblemSpecification(State):
         # - para o problema do soma 1 e 2: return str(self.number)
         # - para o problema das cidades: return self.city
         #
-        None
+        return str(self.cid_atual)
 
     #@staticmethod
     def createArea(self):
@@ -84,8 +84,8 @@ class ProblemSpecification(State):
 def main():
     print('Busca em profundidade iterativa')
     #cid_inicio = 'o'
-    cid_fim = 'i'
-    cid_atual = 'o'
+    cid_fim = 'x'
+    cid_atual = 'i'
     custo = 0
     state = ProblemSpecification(cid_fim, cid_atual, custo, '')
     algorithm = BuscaProfundidadeIterativa()
@@ -98,8 +98,7 @@ def main():
 
     print('Busca Custo Uniforme')
     #cid_inicio = 'o'
-    cid_fim = 'i'
-    cid_atual = 'o'
+    
     custo = 0
     state = ProblemSpecification(cid_fim, cid_atual, custo, '')
     algorithm = BuscaCustoUniforme()

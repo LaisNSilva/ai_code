@@ -74,6 +74,23 @@ class BuscaProfundidadeIterativa (SearchAlgorithm):
 #
 # This class implements a Uniform cost search algorithm
 #
+# class BuscaCustoUniforme (SearchAlgorithm):
+
+#     def search (self, initialState):
+#         open = []
+#         new_n = Node(initialState, None)
+#         open.append((new_n, new_n.g))
+#         while (len(open) > 0):
+#             #list sorted by g()
+#             open.sort(key = sortFunction, reverse = True)
+#             n = open.pop()[0]
+#             if (n.state.is_goal()):
+#                 return n
+#             for i in n.state.sucessors():
+#                 new_n = Node(i,n)
+#                 open.append((new_n,new_n.g))
+#         return None
+
 class BuscaCustoUniforme (SearchAlgorithm):
 
     def search (self, initialState):
@@ -84,6 +101,7 @@ class BuscaCustoUniforme (SearchAlgorithm):
             #list sorted by g()
             open.sort(key = sortFunction, reverse = True)
             n = open.pop()[0]
+            print(n.state.env())
             if (n.state.is_goal()):
                 return n
             for i in n.state.sucessors():
