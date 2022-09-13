@@ -122,7 +122,6 @@ class BuscaGananciosa (SearchAlgorithm):
             #list sorted by h()
             open.sort(key = sortFunction, reverse = True)
             n = open.pop()[0]
-            print(n.state.h())
             if (n.state.is_goal()):
                 return n
             for i in n.state.sucessors():
@@ -144,7 +143,7 @@ class AEstrela (SearchAlgorithm):
             #list sorted by f()
             open.sort(key = sortFunction, reverse = True)
             n = open.pop()[0]
-            logging.debug(n.state.env()+" -- "+str(n.f())+" -- "+str(n.h()))
+            #logging.debug(n.state.env()+" -- "+str(n.f())+" -- "+str(n.h()))
             
             if (n.state.is_goal()):
                 return n
