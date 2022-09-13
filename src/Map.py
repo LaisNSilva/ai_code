@@ -1,4 +1,4 @@
-from aicode.search.SearchAlgorithms import BuscaGananciosa
+from aicode.search.SearchAlgorithms import BuscaGananciosa, BuscaCustoUniforme, BuscaProfundidadeIterativa
 from aicode.search.SearchAlgorithms import AEstrela
 from aicode.search.Graph import State
 import time
@@ -7,34 +7,60 @@ import csv
 
 class Map(State):
 
-    def __init__(self):
-        #TODO
-        pass
+    def __init__(self, cid_fim, cid_atual, custo, op):
+        #self.cid_inicio = cid_inicio
+        
+        self.cid_fim = cid_fim
+        self.cid_atual = cid_atual
+        self.custo = custo
+        self.operator = op
+        
     
     def sucessors(self):
-        #TODO
-        pass
+        sucessors = []
+        for t in Map.area[self.cid_atual]:
+            sucessors.append(Map(self.cid_fim, t[1], t[0], f'Da cidade {self.cid_atual} para {t[1]}, custo atual {self.custo+t[0]}'))
+
+        return sucessors
     
     def is_goal(self):
-        return (self.city == self.goal)
+        if self.cid_atual == self.cid_fim:
+            return True
+        return False
     
     def description(self):
-        return "The map of cities with road distances"
+        return "Describe the problem"
     
     def cost(self):
-        #TODO
-        return 0
-    
+        return self.custo
+
     def print(self):
+        #
+        # Usado para imprimir a solução encontrada. 
+        # O PATH do estado inicial até o final.
         return str(self.operator)
     
     def env(self):
-        #TODO
-        return None
+        #
+        # IMPORTANTE: este método não deve apenas retornar uma descrição do environment, mas 
+        # deve também retornar um valor que descreva aquele nodo em específico. Pois 
+        # esta representação é utilizada para verificar se um nodo deve ou ser adicionado 
+        # na lista de abertos.
+        #
+        # Exemplos de especificações adequadas: 
+        # - para o problema do soma 1 e 2: return str(self.number)+"#"+str(self.cost)
+        # - para o problema das cidades: return self.city+"#"+str(self.cost())
+        #
+        # Exemplos de especificações NÃO adequadas: 
+        # - para o problema do soma 1 e 2: return str(self.number)
+        # - para o problema das cidades: return self.city
+        #
+        return str(self.cid_atual)
 
     def h(self):
-        #TODO
-        return 1
+        # dado a minha cidadde atual, qual é a estimativa para chegar no objetivo
+        # Map.g
+        return int(Map.g.edges[self.cid_atual, self.cid_fim]['distance'])
 
     @staticmethod
     def createArea():
@@ -78,9 +104,40 @@ def main():
 
     Map.createArea()
     Map.createHeuristics()
+    
+    cid_fim = 'x'
+    cid_atual = 'i'
+    custo = 0
 
-    print('Busca por algoritmo A*: sair de p e chegar em n')
-    state = Map('i', 0, 'i', 'x')
+    print('Busca em profundidade iterativa')
+    #cid_inicio = 'o'
+    cid_fim = 'x'
+    cid_atual = 'i'
+    custo = 0
+    state = Map(cid_fim, cid_atual, custo, '')
+    algorithm = BuscaProfundidadeIterativa()
+    result = algorithm.search(state)
+    if result != None:
+        print('Achou!')
+        print(result.show_path())
+    else:
+        print('Nao achou solucao')
+
+    print('Busca Custo Uniforme')
+    #cid_inicio = 'o'
+    
+    
+    state = Map(cid_fim, cid_atual, custo, '')
+    algorithm = BuscaCustoUniforme()
+    result = algorithm.search(state)
+    if result != None:
+        print('Achou!')
+        print(result.show_path())
+    else:
+        print('Nao achou solucao')
+
+    print(f'Busca por algoritmo A*: sair de {cid_atual} e chegar em {cid_fim}')
+    state = Map(cid_fim, cid_atual, custo, '')
     algorithm = AEstrela()
     ts = time.time()
     result = algorithm.search(state)

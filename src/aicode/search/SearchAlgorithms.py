@@ -101,7 +101,7 @@ class BuscaCustoUniforme (SearchAlgorithm):
             #list sorted by g()
             open.sort(key = sortFunction, reverse = True)
             n = open.pop()[0]
-            print(n.state.env())
+            #print(n.state.env())
             if (n.state.is_goal()):
                 return n
             for i in n.state.sucessors():
