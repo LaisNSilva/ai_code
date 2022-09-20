@@ -1,3 +1,4 @@
+from unittest import result
 from aicode.search.SearchAlgorithms import AEstrela
 from aicode.search.Graph import State
 import math
@@ -6,25 +7,68 @@ class Puzzle8(State):
 
     objetivo = [[1,2,3],[8,0,4],[7,6,5]]
 
-    def __init__(self):
-        #TODO
-        pass
+    def __init__(self, tabuleiro, op):
+        self.operator = op
+        self.tabuleiro = tabuleiro
     
+    def onde_esta_N(tabuleiro, n):
+        for i in range(0,3):
+            for j in range(0,3):
+                if tabuleiro[i][j] == n:
+                    return i, j
+
+    def copia_tabuleiro(self):
+        resultado = [[0,0,0],[0,0,0],[0,0,0]]
+        for i in range(0,3):
+            for j in range(0,3):
+                resultado[i][j] = self.tabuleiro[i][j]
+        return resultado
+
     def sucessors(self):
         sucessors = []
-        #TODO
+        lin, col = Puzzle8.onde_esta_N(self.tabuleiro, 0)
+        # zero para cima
+        if lin > 0 and self.operator != 'baixo':
+            novo = self.copia_tabuleiro()
+            temp = self.tabuleiro[lin-1][col]
+            novo[lin][col] = temp
+            novo[lin-1][col] = 0
+            sucessors.append(Puzzle8(novo,'cima'))
+        # zero para baixo
+        if lin < 2 and self.operator != 'cima':
+            novo = self.copia_tabuleiro()
+            temp = self.tabuleiro[lin+1][col]
+            novo[lin][col] = temp
+            novo[lin+1][col] = 0
+            sucessors.append(Puzzle8(novo,"baixo"))
+        # zero para esquerda
+        if col > 0 and self.operator != 'direita':
+            novo = self.copia_tabuleiro()
+            temp = self.tabuleiro[lin][col-1]
+            novo[lin][col] = temp
+            novo[lin][col-1] = 0
+            sucessors.append(Puzzle8(novo,"esquerda"))
+        # zero para direita
+        if col < 2 and self.operator != 'esquerda':
+            novo = self.copia_tabuleiro()
+            temp = self.tabuleiro[lin][col+1]
+            novo[lin][col] = temp
+            novo[lin][col+1] = 0
+            sucessors.append(Puzzle8(novo,"direita"))
         return sucessors
     
     def is_goal(self):
-        #TODO
+        for i in range(0,3):
+            for j in range(0,3):
+                if self.tabuleiro[i][j] != self.objetivo[i][j]:
+                    return False
         return True
     
     def description(self):
         return "8 Puzzle"
     
     def cost(self):
-        #TODO
-        pass
+        return 1
 
     def print(self):
         return str(self.operator)
@@ -33,8 +77,44 @@ class Puzzle8(State):
         return str(self.tabuleiro)
 
     def h(self):
-        #TODO
-        pass
+        return self.h1()
+        #return self.h2()
+
+    #
+    # quantidade de pecas fora do lugar
+    #
+    def h1(self):
+        count = 0
+        if self.tabuleiro[0][0] != 1:
+            count = count + 1
+        if self.tabuleiro[0][1] != 2:
+            count = count + 1
+        if self.tabuleiro[0][2] != 3:
+            count = count + 1
+        if self.tabuleiro[1][0] != 8:
+            count = count + 1
+        if self.tabuleiro[1][1] != 0:
+            count = count + 1
+        if self.tabuleiro[1][2] != 4:
+            count = count + 1
+        if self.tabuleiro[2][0] != 7:
+            count = count + 1
+        if self.tabuleiro[2][1] != 6:
+            count = count + 1
+        if self.tabuleiro[2][2] != 5:
+            count = count + 1
+        return count
+    
+    #
+    # distancia euclidiana
+    #
+    def h2(self):
+        count = 0
+        for num in range(0,8):
+            lin_ideal, col_ideal = Puzzle8.onde_esta_N(self.objetivo, num)
+            lin_real, col_real = Puzzle8.onde_esta_N(self.tabuleiro, num)
+            count = count + math.sqrt((lin_ideal - lin_real)**2 + (col_ideal - col_real)**2)
+        return count
 
     #
     # Deve-se calcular a quantidade de inversões necessárias para ordenar 
@@ -79,7 +159,7 @@ def main():
     tabuleiro_impossivel1 = [[3,4,8],[1,2,5],[7,0,6]]
     tabuleiro_impossivel2 = [[5,4,0],[6,1,8],[7,3,2]]
 
-    state = Puzzle8(tabuleiro_facil,'')
+    state = Puzzle8(tabuleiro_dificil3,'')
     print(state.show_path())
 
 if __name__ == '__main__':

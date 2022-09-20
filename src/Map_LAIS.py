@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 from aicode.search.SearchAlgorithms import BuscaGananciosa, BuscaCustoUniforme, BuscaProfundidadeIterativa
+=======
+from aicode.search.SearchAlgorithms import BuscaProfundidadeIterativa
+from aicode.search.SearchAlgorithms import BuscaCustoUniforme
+from aicode.search.SearchAlgorithms import BuscaGananciosa
+>>>>>>> upstream/main
 from aicode.search.SearchAlgorithms import AEstrela
 from aicode.search.Graph import State
 import time
@@ -7,6 +13,7 @@ import csv
 
 class Map(State):
 
+<<<<<<< HEAD
     def __init__(self, cid_fim, cid_atual, custo, op):
         #self.cid_inicio = cid_inicio
         
@@ -21,6 +28,19 @@ class Map(State):
         for t in Map.area[self.cid_atual]:
             sucessors.append(Map(self.cid_fim, t[1], t[0], f'Da cidade {self.cid_atual} para {t[1]}, custo atual {self.custo+t[0]}'))
 
+=======
+    def __init__(self, city, cost, op, goal):
+        self.city = city
+        self.cost_value = cost
+        self.operator = op
+        self.goal = goal
+    
+    def sucessors(self):
+        sucessors = []
+        neighbors = Map.area[self.city]
+        for next_city in neighbors:
+            sucessors.append(Map(next_city[1], next_city[0], next_city[1], self.goal))
+>>>>>>> upstream/main
         return sucessors
     
     def is_goal(self):
@@ -32,8 +52,14 @@ class Map(State):
         return "Describe the problem"
     
     def cost(self):
+<<<<<<< HEAD
         return self.custo
 
+=======
+        #return the cost to get at city "city"
+        return self.cost_value
+    
+>>>>>>> upstream/main
     def print(self):
         #
         # Usado para imprimir a solução encontrada. 
@@ -41,6 +67,7 @@ class Map(State):
         return str(self.operator)
     
     def env(self):
+<<<<<<< HEAD
         #
         # IMPORTANTE: este método não deve apenas retornar uma descrição do environment, mas 
         # deve também retornar um valor que descreva aquele nodo em específico. Pois 
@@ -61,6 +88,15 @@ class Map(State):
         # dado a minha cidadde atual, qual é a estimativa para chegar no objetivo
         # Map.g
         return int(Map.g.edges[self.cid_atual, self.cid_fim]['distance'])
+=======
+        return self.city
+        #return self.city+"#"+str(self.cost())
+
+    def h(self):
+        return int(Map.g.edges[self.city,self.goal]['distance'])
+        #return random.randint(1,10)
+        #return 1
+>>>>>>> upstream/main
 
     @staticmethod
     def createArea():
@@ -139,6 +175,7 @@ def main():
     print(f'Busca por algoritmo A*: sair de {cid_atual} e chegar em {cid_fim}')
     state = Map(cid_fim, cid_atual, custo, '')
     algorithm = AEstrela()
+    #algorithm = BuscaCustoUniforme()
     ts = time.time()
     result = algorithm.search(state)
     tf = time.time()
