@@ -67,6 +67,15 @@ class VacuumWorldGeneric(State):
     def env(self):
         return '\n'.join('\t'.join('%0.3f' %x for x in y) for y in self.mapa)+" "+str(self.lin)+" "+str(self.col)
 
+    def h(self):
+        c= 0
+        for y in self.mapa:
+            for x in y:
+                if x !=0:
+                    c+=1
+        return c
+
+
 
 def convert_file_to_map(file_map_path):
     return numpy.loadtxt(open(file_map_path, "rb"), delimiter=";")
@@ -79,8 +88,18 @@ def main(file_map_path, lin, col):
     #print('Busca em AEstrela')
     #algorithm = AEstrela()
     
-    print('Busca Profundidade Iterativa')
-    algorithm = BuscaProfundidadeIterativa()
+    # print('Busca Profundidade Iterativa')
+    # algorithm = BuscaProfundidadeIterativa()
+    
+    # result = algorithm.search(state)
+    # if result != None:
+    #     print('Achou!')
+    #     print(result.show_path())
+    # else:
+    #     print('Nao achou solucao')
+
+    print('Busca AEstrela')
+    algorithm = AEstrela()
     
     result = algorithm.search(state)
     if result != None:

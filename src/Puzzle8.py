@@ -77,8 +77,8 @@ class Puzzle8(State):
         return str(self.tabuleiro)
 
     def h(self):
-        return self.h1()
-        #return self.h2()
+        #return self.h1()
+        return self.h2()
 
     #
     # quantidade de pecas fora do lugar

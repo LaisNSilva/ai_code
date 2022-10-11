@@ -58,6 +58,7 @@ class VacuumWorld(State):
     def print(self):
         return str(self.operator)
 
+   
 def main():
     
     #

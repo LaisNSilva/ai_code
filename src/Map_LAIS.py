@@ -10,32 +10,34 @@ import csv
 
 class Map(State):
 
-    # def __init__(self, cid_fim, cid_atual, custo, op):
-    #     #self.cid_inicio = cid_inicio
+    def __init__(self, cid_fim, cid_atual, custo, op):
+        #self.cid_inicio = cid_inicio
         
-    #     self.cid_fim = cid_fim
-    #     self.cid_atual = cid_atual
-    #     self.custo = custo
-    #     self.operator = op
-        
-    
-    # def sucessors(self):
-    #     sucessors = []
-    #     for t in Map.area[self.cid_atual]:
-    #         sucessors.append(Map(self.cid_fim, t[1], t[0], f'Da cidade {self.cid_atual} para {t[1]}, custo atual {self.custo+t[0]}'))
-
-    def __init__(self, city, cost, op, goal):
-        self.city = city
-        self.cost_value = cost
+        self.cid_fim = cid_fim
+        self.cid_atual = cid_atual
+        self.custo = custo
         self.operator = op
-        self.goal = goal
+        
     
     def sucessors(self):
         sucessors = []
-        neighbors = Map.area[self.city]
-        for next_city in neighbors:
-            sucessors.append(Map(next_city[1], next_city[0], next_city[1], self.goal))
+        for t in Map.area[self.cid_atual]:
+            sucessors.append(Map(self.cid_fim, t[1], t[0], f'Da cidade {self.cid_atual} para {t[1]}, custo atual {self.custo+t[0]}'))
+
         return sucessors
+
+    # def __init__(self, city, cost, op, goal):
+    #     self.city = city
+    #     self.cost_value = cost
+    #     self.operator = op
+    #     self.goal = goal
+    
+    # def sucessors(self):
+    #     sucessors = []
+    #     neighbors = Map.area[self.city]
+    #     for next_city in neighbors:
+    #         sucessors.append(Map(next_city[1], next_city[0], next_city[1], self.goal))
+    #     return sucessors
     
     def is_goal(self):
         if self.cid_atual == self.cid_fim:
@@ -46,10 +48,10 @@ class Map(State):
         return "Describe the problem"
     
     def cost(self):
-        # return self.custo
+        return self.custo
 
         #return the cost to get at city "city"
-        return self.cost_value
+        #return self.cost_value
     
     def print(self):
         #
@@ -77,7 +79,7 @@ class Map(State):
     def h(self):
         # dado a minha cidadde atual, qual é a estimativa para chegar no objetivo
         # Map.g
-        return int(Map.g.edges[self.cid_atual, self.cid_fim]['distance'])
+        return int(Map.g.edges[self.cid_atual, self.cid_fim]['distance']) * 1000
         return self.city
         #return self.city+"#"+str(self.cost())
 
@@ -133,36 +135,51 @@ def main():
     cid_atual = 'i'
     custo = 0
 
-    print('Busca em profundidade iterativa')
-    #cid_inicio = 'o'
-    cid_fim = 'x'
-    cid_atual = 'i'
-    custo = 0
-    state = Map(cid_fim, cid_atual, custo, '')
-    algorithm = BuscaProfundidadeIterativa()
-    result = algorithm.search(state)
-    if result != None:
-        print('Achou!')
-        print(result.show_path())
-    else:
-        print('Nao achou solucao')
+    # print('Busca em profundidade iterativa')
+    # #cid_inicio = 'o'
+    # cid_fim = 'x'
+    # cid_atual = 'i'
+    # custo = 0
+    # state = Map(cid_fim, cid_atual, custo, '')
+    # algorithm = BuscaProfundidadeIterativa()
+    # result = algorithm.search(state)
+    # if result != None:
+    #     print('Achou!')
+    #     print(result.show_path())
+    # else:
+    #     print('Nao achou solucao')
 
-    print('Busca Custo Uniforme')
-    #cid_inicio = 'o'
+    # print('Busca Custo Uniforme')
+    # #cid_inicio = 'o'
     
     
-    state = Map(cid_fim, cid_atual, custo, '')
-    algorithm = BuscaCustoUniforme()
-    result = algorithm.search(state)
-    if result != None:
-        print('Achou!')
-        print(result.show_path())
-    else:
-        print('Nao achou solucao')
+    # state = Map(cid_fim, cid_atual, custo, '')
+    # algorithm = BuscaCustoUniforme()
+    # result = algorithm.search(state)
+    # if result != None:
+    #     print('Achou!')
+    #     print(result.show_path())
+    # else:
+    #     print('Nao achou solucao')
 
     print(f'Busca por algoritmo A*: sair de {cid_atual} e chegar em {cid_fim}')
     state = Map(cid_fim, cid_atual, custo, '')
     algorithm = AEstrela()
+    #algorithm = BuscaCustoUniforme()
+    ts = time.time()
+    result = algorithm.search(state)
+    tf = time.time()
+    if result != None:
+        print(result.show_path())
+    else:
+        print('Nao achou solucao')
+    print('Tempo de processamento em segundos: ' + str(tf-ts))
+    print('O custo da solucao eh: '+str(result.g))
+    print('')
+
+    print(f'Busca por algoritmo BuscaGananciosa: sair de {cid_atual} e chegar em {cid_fim}')
+    state = Map(cid_fim, cid_atual, custo, '')
+    algorithm = BuscaGananciosa()
     #algorithm = BuscaCustoUniforme()
     ts = time.time()
     result = algorithm.search(state)
