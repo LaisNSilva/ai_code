@@ -52,8 +52,12 @@ class VacuumWorldGeneric(State):
         return True
 
     def h(self):
-        #TODO
-        return 0
+        count = 0
+        for y in self.mapa:
+            for x in y:
+                if x != 0:
+                    count = count + 1
+        return count
     
     def description(self):
         return "Agente genérico para o problema do aspirador de pó"
@@ -65,7 +69,7 @@ class VacuumWorldGeneric(State):
         return str(self.operator)
     
     def env(self):
-        return '\n'.join('\t'.join('%0.3f' %x for x in y) for y in self.mapa)+" "+str(self.lin)+" "+str(self.col)
+        return str(self.mapa)+" "+str(self.lin)+" "+str(self.col)
 
     def h(self):
         c= 0
@@ -85,8 +89,8 @@ def main(file_map_path, lin, col):
     print(mapa)
     state = VacuumWorldGeneric(mapa, lin, col, '')
 
-    #print('Busca em AEstrela')
-    #algorithm = AEstrela()
+    print('Busca em AEstrela')
+    algorithm = AEstrela()
     
     # print('Busca Profundidade Iterativa')
     # algorithm = BuscaProfundidadeIterativa()
@@ -100,6 +104,8 @@ def main(file_map_path, lin, col):
 
     print('Busca AEstrela')
     algorithm = AEstrela()
+    #print('Busca Profundidade Iterativa')
+    #algorithm = BuscaProfundidadeIterativa()
     
     result = algorithm.search(state)
     if result != None:

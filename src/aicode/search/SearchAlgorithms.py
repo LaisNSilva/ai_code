@@ -15,7 +15,6 @@ def sortFunction(val):
 # 4) Uniform cost search (CustoUniforme)
 # 5) Greddy search algorithm (BuscaGananciosa)
 # 6) A* search algorithm (AEstrela)
-# 7) hill-climing search algorithms
 #
 
 class SearchAlgorithm:
@@ -157,6 +156,7 @@ class AEstrela (SearchAlgorithm):
                     # eh adicionado o conteudo
                     states.append(new_n.state.env())
                     logging.debug(len(states))
+<<<<<<< HEAD
                 else: 
                     logging.debug('nao entrou')
         return None
@@ -194,8 +194,8 @@ class SubidaMontanha2 (SearchAlgorithm):
             if prox.h() >= atual.h():
                 if atual.is_goal():
                     return atual
+=======
+>>>>>>> upstream/main
                 else: 
-                    atual.randomBoard()
-            else:
-                atual = prox
-
+                    logging.debug('nao entrou')
+        return None
