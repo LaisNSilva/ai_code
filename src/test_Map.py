@@ -193,3 +193,18 @@ def test_menor_caminho_x_ate_o():
     assert result.g == 16
     print(result.show_path())
 
+def test_p_x():
+    state = Map('p', 0, 'p', 'x')
+    algorithm = AEstrela()
+    ts = time.time()
+    result = algorithm.search(state)
+    tf = time.time()
+    if result != None:
+        print(result.show_path())
+    else:
+        print('Nao achou solucao')
+    print('Tempo de processamento em segundos: ' + str(tf-ts))
+    print('O custo da solucao eh: '+str(result.g))
+    print('')
+    assert result.g == 21
+
