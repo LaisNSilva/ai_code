@@ -66,7 +66,50 @@ class N_QueensProblem(State):
     
     def h(self):
         #TODO
-        pass
+        r = 0
+        # checar linhas, colunas e diagonais
+        # linhas
+        for l in self.board:
+            c = l.count(1)
+            if c > 1:
+                r+= c
+
+        #colunas
+        for i in range(len(self.board[0])): #quantidade de colunas
+            c_col = 0
+            for l in self.board:
+                if l[i]==1:
+                    c_col+=1
+            if c_col>1:
+                r+=c_col
+
+        #diagonais
+        diag_prin = np.diag(self.board)
+        c = diag_prin.count(1)
+        if c > 1:
+            r+= c
+        for i in range(len(self.board[0])-2):
+            d = np.diag(self.board, i)
+            c = d.count(1)
+            if c > 1:
+                r+= c
+            d = np.diag(self.board, -i)
+            c = d.count(1)
+            if c > 1:
+                r+= c
+
+        diag_prin = np.fliplr(self.board).diag()
+        c = diag_prin.count(1)
+        for i in range(len(self.board[0])-2):
+            d = np.fliplr(self.board).diag(i)
+            c = d.count(1)
+            if c > 1:
+                r+= c
+            d = np.fliplr(self.board).diag(-i)
+            c = d.count(1)
+            if c > 1:
+                r+= c
+        return r
 
     def randomState(self):
         self.board = self.generateBoard()
